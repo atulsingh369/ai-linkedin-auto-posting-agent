@@ -93,7 +93,13 @@ ai-linkedin-auto-posting-agent/
 │── export.json
 │── featured-assets/
 │   └── architecture.png
-│   └── screenshot.png
+│   └── screenshot0.png
+│   └── screenshot1.png
+│   └── screenshot2.png
+│   └── screenshot3.png
+│   └── screenshot4.png
+│   └── screenshot5.png
+│   └── screenshot6.png
 │── README.md
 │── LICENSE
 ```
