@@ -102,13 +102,13 @@ ai-linkedin-auto-posting-agent/
 
 ## 📸 Workflow Preview (Live System Screenshot)
 
-<img src="featured-assets/screenshot0.png" width="400" alt="Screenshot 0" />
-<img src="featured-assets/screenshot1.png" width="400" alt="Screenshot 1" />
-<img src="featured-assets/screenshot2.png" width="400" alt="Screenshot 2" />
-<img src="featured-assets/screenshot3.png" width="400" alt="Screenshot 3" />
-<img src="featured-assets/screenshot4.png" width="400" alt="Screenshot 4" />
-<img src="featured-assets/screenshot5.png" width="400" alt="Screenshot 5" />
-<img src="featured-assets/screenshot6.png" width="400" alt="Screenshot 6" />
+<img src="featured-assets/screenshot0.png" width="250" alt="Screenshot 0" />
+<img src="featured-assets/screenshot1.png" width="250" alt="Screenshot 1" />
+<img src="featured-assets/screenshot2.png" width="250" alt="Screenshot 2" />
+<img src="featured-assets/screenshot3.png" width="250" alt="Screenshot 3" />
+<img src="featured-assets/screenshot4.png" width="250" alt="Screenshot 4" />
+<img src="featured-assets/screenshot5.png" width="250" alt="Screenshot 5" />
+<img src="featured-assets/screenshot6.png" width="250" alt="Screenshot 6" />
 
 ---
 
