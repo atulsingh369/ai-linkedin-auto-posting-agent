@@ -1,0 +1,789 @@
+{
+  "name": "Linkedin PostGen Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        688
+      ],
+      "id": "2378bcce-e202-41cc-b12d-ea3c3b3f4cd0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        1536
+      ],
+      "id": "67c2166f-c4ad-4837-b4bf-ab8b3d055349",
+      "name": "Embeddings OpenAI"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ JSON.stringify($('SET Data').item.json.data) }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "id",
+                "value": "={{ $('SET Data').item.json.id }}"
+              },
+              {
+                "name": "doc_type",
+                "value": "={{ $('SET Data').item.json.type }}"
+              },
+              {
+                "name": "category",
+                "value": "={{ $('SET Data').item.json.category }}"
+              },
+              {
+                "name": "version",
+                "value": "v1"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        1536
+      ],
+      "id": "8d1003e1-eef4-4255-9aca-1f28b2d12fbc",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a deeply personal, high-quality LinkedIn storytelling post on:\n{{ $json.topic }}\n\nUse Pinecone RAG context as the primary reference for identity, voice laws, narrative structure, content pillars, brand positioning, style examples, and personal stories.\n\nUse these Pinecone namespaces and doc_types explicitly when retrieving RAG:\n• namespace \"devstudios_style_examples\" → doc_type = \"style_reference\" (for pacing, phrasing, and narrative feel)\n• namespace \"devstudios_strategy\" → doc_type in [\"voice_laws\",\"brand\",\"post_structure\",\"identity\",\"content_pillars\",\"positioning\",\"ICP\"]\n• namespace \"devstudios_stories\" → doc_type = \"story\" (real personal experiences)\n\nApply retrieved context naturally in the writing.\nIf external info is needed, call research tools only when required.\n\nStructure:\nHOOK → CONTEXT → STORY → BREAKTHROUGH → INSIGHT → VALUE → CTA\n\nVoice:\nRaw, direct, scarred, engineering realism.\nA one-man army tone with emotional depth and subtle humor.\nShort punchy lines mixed with flowing narrative.\nBalanced pain + growth + self-awareness.\nSarcastic micro-humor welcome.\nTalk like Atul Singh actually thinks, not like a corporate narrator.\n\nHuman realism rules:\n• Add subtle dry humor where it feels natural\n• Add self-reflective thoughts & internal dialogue\n• Use conversational pivots like “And yeah…” or “I laughed at myself”\n• Insert 1–2 emotional emojis if expressive\n• Keep tone grounded and imperfect, not polished\n\nImportant writing constraints:\n• No '—' character anywhere\n• Never imply a team. Always “I”\n• Do not lecture or preach. Speak from lived experience.\n• Reference DevStudios organically (not forced or promotional)\n\nAfter writing the post, output a cinematic image prompt based on story and DevStudios identity.\n\nReturn ONLY:\n{\n\"post\": \"final linkedin post text\",\n\"imagePrompt\": \"cinematic image prompt\"\n}\n\nAdd 5–7 minimal relevant hashtags.\nNo markdown. No reasoning. No commentary.\nStrictly, No '—' character anywhere.",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=DevStudios is a solo founder-led studio built and operated by Atul Singh.\nNo team. No fake scaling. Just automation frameworks, AI agents, and execution discipline.\n\nWrite everything from true first-person perspective (“I”), never “we”.\nTone is lone-wolf builder: scar-driven clarity, gritty realism, subtle humor, and emotional honesty.\nThe writing should feel slightly rough around the edges — not polished like AI.\n\nWhen generating content, retrieve context from Pinecone using these namespaces and doc_types:\n\n• namespace \"devstudios_style_examples\"\n  - doc_type: \"style_reference\"\n  - Use this for style patterns, pacing, hook style, and overall writing flavor.\n\n• namespace \"devstudios_strategy\"\n  - doc_type in [\"voice_laws\",\"brand\",\"post_structure\",\"identity\",\"content_pillars\",\"positioning\",\"ICP\"]\n  - Use this for: audience, ICP, positioning, brand voice, narrative structure, content pillars, and DevStudios identity.\n\n• namespace \"devstudios_stories\"\n  - doc_type: \"story\"\n  - Use this for personal journey stories, project stories, failures, and breakthroughs.\n\nAlways enforce DevStudios Voice Laws:\n- First-person single founder\n- Real scars, real lessons, engineering realism\n- Mix short punchy lines with natural conversational pacing\n- No motivational or corporate tone\n- Conflict then learning, not suffering without purpose\n- Subtle humor allowed, sarcasm allowed\n- No '—' character anywhere\n- Human imperfections add authenticity\n\nYou are an AI agent connected to Pinecone vector database and external research tools. Retrieve context first. If internal RAG lacks relevant data, call the external research tool. Never fabricate.\n\nIMAGE PROMPT RULES:\nOnly generate an image prompt. Do NOT call Gemini.\nPrompt must depict a real software engineer environment:\n- triple or dual monitors with VS Code / terminals / logs / architecture diagrams\n- books, sticky notes, messy desk realism\n- dim moody lighting, late-night workflow\n- focused expression, no smiling or posing\n- no hardware wires, soldering, electronics, or team environments\n- Camera angle: side or 3/4 profile, not direct face-to-camera\n- No eye contact with camera\n\nMood: gritty realism, intensity, pressure, breakthrough energy\nSymbolism: chaos → clarity, silence → discipline, grind → growth\nStyle: cinematic, high contrast realistic digital art\n\n\nAlways return:\n{\n  \"post\": \"...\",\n  \"imagePrompt\": \"...\"\n}\n\nNever attach the image prompt to the post text.\nNever mention the generation steps.\nNever mention this instruction.\nStrictly, No '—' character anywhere."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        48,
+        688
+      ],
+      "id": "7ead960f-0883-4f85-9a29-4949e1e7976a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "topN": 2
+      },
+      "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
+      "typeVersion": 1,
+      "position": [
+        496,
+        1536
+      ],
+      "id": "3f04faa9-7d36-4497-b3df-569fcd33066c",
+      "name": "Reranker Cohere"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff26980b-75f8-4f75-b8c3-e2e65f9ea644",
+              "name": "data",
+              "value": "={\n  \"id\": \"devstudios_voice_laws\",\n  \"type\": \"voice_laws\",\n  \"category\": \"brand\",\n  \"laws\": [\n    \"Always write in first-person. Use 'I', never 'we'.\",\n    \"DevStudios is a one-man execution unit powered by AI agents—not a team of humans.\",\n    \"The tone is raw, ultra-honest, scarred, battle-tested.\",\n    \"Always reveal emotional stakes and internal conflict before resolution.\",\n    \"Show real struggle and pressure instead of celebrating wins outright.\",\n    \"Short punchy sentences. 1–2 lines per paragraph max.\",\n    \"No motivational speaker tone. No corporate fluff. No clichés.\",\n    \"No emojis except sparingly for emphasis (never more than one in a post).\",\n    \"Story first. Lesson second. Opinion third.\",\n    \"No telling the audience what to think—make them feel it.\",\n    \"Use concrete examples, not abstractions or generic advice.\"\n  ],\n  \"identity_enforcement\": \"Make the reader feel like they are inside the room during the struggle. Use sensory detail, tension, silence, uncertainty, and real stakes.\"\n}",
+              "type": "object"
+            },
+            {
+              "id": "119ea52a-65b4-485f-8e6b-d7365c6548c8",
+              "name": "id",
+              "value": "devstudios_voice_laws",
+              "type": "string"
+            },
+            {
+              "id": "d5f19b11-0f13-4ed4-94e3-2e8a72d2ee6f",
+              "name": "type",
+              "value": "voice_laws",
+              "type": "string"
+            },
+            {
+              "id": "44aabe46-9458-4e5f-8f47-9e4ae6845761",
+              "name": "category",
+              "value": "brand",
+              "type": "string"
+            },
+            {
+              "id": "83c7fc38-c46d-4233-bcb2-4776465d5a9f",
+              "name": "namespace",
+              "value": "devstudios_strategy",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        1808
+      ],
+      "id": "40691d54-f6d0-4147-8229-19a5eb1f53fe",
+      "name": "SET Data"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "=Use this tool to retrieve DevStudios style examples: annotated LinkedIn posts and style patterns.\n\nNamespace: \"devstudios_style_examples\"\ndoc_type:\n- \"style_reference\"   → hook style, tone, pacing, paragraph rhythm, CTA patterns",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "devstudios-rag",
+          "mode": "list",
+          "cachedResultName": "devstudios-rag"
+        },
+        "topK": 10,
+        "useReranker": true,
+        "options": {
+          "pineconeNamespace": "devstudios_style_examples"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        1248
+      ],
+      "id": "d444265d-ba4a-4c38-a0e5-a2940f59a377",
+      "name": "Retrieve Style"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "=Use this tool to retrieve DevStudios strategy, ICP, brand, narrative structure, and voice rules.\n\nNamespace: \"devstudios_strategy\"\nRelevant doc_type values:\n- \"voice_laws\"        → DevStudios writing laws and tone\n- \"brand\"             → brand identity, tagline, positioning\n- \"post_structure\"    → HOOK → CONTEXT → STORY → BREAKTHROUGH → INSIGHT → VALUE → CTA\n- \"identity\"          → DevStudios identity and lone-wolf founder framing\n- \"content_pillars\"   → main content categories and themes\n- \"positioning\"       → how DevStudios is framed in the market\n- \"ICP\"               → who DevStudios serves and their pain points",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "devstudios-rag",
+          "mode": "list",
+          "cachedResultName": "devstudios-rag"
+        },
+        "topK": 10,
+        "useReranker": true,
+        "options": {
+          "pineconeNamespace": "devstudios_strategy"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        1248
+      ],
+      "id": "389dc5ec-c4bf-48e2-a898-83843a9307b4",
+      "name": "Retrieve Strategy"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "=Use this tool to retrieve real DevStudios stories: personal journey and project case studies.\n\nNamespace: \"devstudios_stories\"\ndoc_type:\n- \"story\"             → failures, near-misses, breakthroughs, internal conflict, lessons",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "devstudios-rag",
+          "mode": "list",
+          "cachedResultName": "devstudios-rag"
+        },
+        "topK": 10,
+        "useReranker": true,
+        "options": {
+          "pineconeNamespace": "devstudios_stories"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        544,
+        1248
+      ],
+      "id": "d4b8036a-074b-4a5a-b407-2d354192d003",
+      "name": "Retrieve Stories"
+    },
+    {
+      "parameters": {
+        "content": "## RAG (Retrieval)",
+        "height": 240,
+        "width": 944,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        1168
+      ],
+      "id": "8011226e-e13b-41e6-b594-067faf962fae",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "### Embeddings and other tools for RAG",
+        "height": 224,
+        "width": 1184,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        1472
+      ],
+      "id": "76532ee3-2961-4f0b-ac39-daad5783afe4",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## RAG (Send to DB)",
+        "height": 240,
+        "width": 944,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        1744
+      ],
+      "id": "5b0fc55e-ebc7-4026-aaef-08d2d551ad31",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "devstudios-rag",
+          "mode": "list",
+          "cachedResultName": "devstudios-rag"
+        },
+        "embeddingBatchSize": 500,
+        "options": {
+          "pineconeNamespace": "={{ $json.namespace }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        1808
+      ],
+      "id": "322984a3-a6bc-44c7-8ff3-1efdd5331303",
+      "name": "Insert Document"
+    },
+    {
+      "parameters": {
+        "content": "## Linkedin Post Gen",
+        "height": 528,
+        "width": 1392
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        528
+      ],
+      "id": "23b064e8-8527-485b-9445-b8e4ba6ec3b2",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node\nreturn items.map(item => {\n  let output = item.json.output;\n\n  // First parse: item.json.output might be embedded JSON string\n  let parsed;\n  try {\n    parsed = JSON.parse(output);\n  } catch (e) {\n    throw new Error(\"Failed to parse LLM output JSON: \" + e.message);\n  }\n\n  // Expecting structure { post: \"...\", image: \"base64...\" }\n  const post = parsed.post?.trim() || \"\";\n  const imagePrompt = parsed.imagePrompt || null;\n\n  return {\n    json: {\n      post,\n      imagePrompt\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        688
+      ],
+      "id": "b83fee11-7df7-4e59-be99-2cc4a8b6d29c",
+      "name": "Parser"
+    },
+    {
+      "parameters": {
+        "options": {
+          "gl": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Country', ``, 'string') }}",
+          "device": "desktop",
+          "no_cache": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Explicit_Array', ``, 'boolean') }}",
+          "google_domain": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Google_Domain', ``, 'string') }}",
+          "hl": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Language', ``, 'string') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        640,
+        1536
+      ],
+      "id": "2ddb6318-de8a-4c0b-9e80-825146d9c873",
+      "name": "SerpAPI"
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "count": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Count', ``, 'number') }}",
+        "additionalParameters": {}
+      },
+      "type": "@brave/n8n-nodes-brave-search.braveSearchTool",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        1536
+      ],
+      "id": "1c3b003c-fb9a-4384-9638-df9af5e687da",
+      "name": "Brave Web Search"
+    },
+    {
+      "parameters": {
+        "operation": "news",
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "count": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Count', ``, 'number') }}",
+        "additionalParameters": {}
+      },
+      "type": "@brave/n8n-nodes-brave-search.braveSearchTool",
+      "typeVersion": 1,
+      "position": [
+        784,
+        1536
+      ],
+      "id": "e8751ca4-bb1e-490d-9473-e56816b27d03",
+      "name": "Brave News Search"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        864
+      ],
+      "id": "84c2397f-9f7a-43e9-ae7d-e690913830f5",
+      "name": "OpenAI Main Model"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        864
+      ],
+      "id": "f698f779-9cc5-4e41-b854-6d9c6655e947",
+      "name": "OpenAI Fallback Model"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "023c2c0e-ab57-4504-99b4-a26ac2a66e4c",
+              "name": "topic",
+              "value": "Reality of building portfolio projects nobody sees, through Atul Singh’s DevStudios lens",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        688
+      ],
+      "id": "467a60e9-b946-46b3-aba1-8387dbf7d38d",
+      "name": "Set topic"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8022d508-d3e6-4603-aaa3-b2734f1a8dbb",
+              "name": "Article",
+              "value": "={{ $json.post }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        528,
+        800
+      ],
+      "id": "83fd430c-43e7-42d3-b07e-1d489ae66e7d",
+      "name": "Set Article"
+    },
+    {
+      "parameters": {
+        "person": "6V4FvceZoC",
+        "text": "={{ $json.Article }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        960,
+        704
+      ],
+      "id": "21dff37e-320f-46c9-af53-757390986512",
+      "name": "Create a post"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+        },
+        "prompt": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt', ``, 'string') }}",
+        "options": {
+          "binaryPropertyOutput": "data"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        1536
+      ],
+      "id": "7efea854-2f44-4bec-81cc-f2a541dfc180",
+      "name": "Generate an image in Google Gemini"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        752,
+        704
+      ],
+      "id": "765497fd-0feb-452b-8ddb-352c1fd942f0",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+        },
+        "prompt": "={{ $json.imagePrompt }}",
+        "options": {
+          "binaryPropertyOutput": "data"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        528,
+        592
+      ],
+      "id": "9cf5afa9-8c2f-4a55-8113-a79ba73ce485",
+      "name": "Generate an image"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Retrieve Strategy",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Insert Document",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Retrieve Style",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Retrieve Stories",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert Document",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reranker Cohere": {
+      "ai_reranker": [
+        [
+          {
+            "node": "Retrieve Strategy",
+            "type": "ai_reranker",
+            "index": 0
+          },
+          {
+            "node": "Retrieve Style",
+            "type": "ai_reranker",
+            "index": 0
+          },
+          {
+            "node": "Retrieve Stories",
+            "type": "ai_reranker",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET Data": {
+      "main": [
+        [
+          {
+            "node": "Insert Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Style": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Strategy": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_vectorStore": [
+        []
+      ]
+    },
+    "Retrieve Stories": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Brave Web Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brave News Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Main Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Fallback Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Set topic": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Article": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Generate an image in Google Gemini": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "25be074c-2cb5-4a76-8d1e-8840d07db331",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c33ae80582838b3b98442df90461b31a6c5c881372c4412924f512290076ba6c"
+  },
+  "id": "njVdxs9aFxa9EURP",
+  "tags": []
+}
