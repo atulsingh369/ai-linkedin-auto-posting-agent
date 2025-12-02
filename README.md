@@ -102,15 +102,13 @@ ai-linkedin-auto-posting-agent/
 
 ## 📸 Workflow Preview (Live System Screenshot)
 
-<div style="display: flex; justify-content: space-evenly; item-align: center; flex-wrap: wrap;">
-<img src="featured-assets/screenshot0.png" width="450" alt="Screenshot 0" />
-<img src="featured-assets/screenshot1.png" width="450" alt="Screenshot 1" />
-<img src="featured-assets/screenshot2.png" width="600" alt="Screenshot 2" />
-<img src="featured-assets/screenshot3.png" width="300" alt="Screenshot 3" />
-<img src="featured-assets/screenshot4.png" width="300" alt="Screenshot 4" />
-<img src="featured-assets/screenshot5.png" width="600" alt="Screenshot 5" />
-<img src="featured-assets/screenshot6.png" width="900" height="500" alt="Screenshot 6" />
-</div>
+| | |
+|---|---|
+| <img src="featured-assets/screenshot0.png" width="400"/> | <img src="featured-assets/screenshot1.png" width="400"/> |
+| <img src="featured-assets/screenshot2.png" width="400"/> | <img src="featured-assets/screenshot3.png" width="400"/> |
+| <img src="featured-assets/screenshot4.png" width="400"/> | <img src="featured-assets/screenshot5.png" width="400"/> |
+| <img src="featured-assets/screenshot6.png" width="800"/> |  |
+
 
 ---
 
