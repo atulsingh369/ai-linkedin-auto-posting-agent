@@ -1,5 +1,16 @@
 # AI LinkedIn Auto Posting Agent — RAG-Powered Content Generation & Auto-Publish Workflow
 
+Autonomous AI workflow that transforms topic input into fully generated and published LinkedIn content using RAG memory, multi-model reasoning, image generation, and direct platform integration.
+
+![n8n](https://img.shields.io/badge/n8n-Automation-orange)
+![OpenAI](https://img.shields.io/badge/LLM-OpenAI-blue)
+![Pinecone](https://img.shields.io/badge/VectorDB-Pinecone-green)
+![Gemini](https://img.shields.io/badge/Image-Gemini-purple)
+![LinkedIn](https://img.shields.io/badge/API-LinkedIn-blue)
+![License](https://img.shields.io/badge/License-Apache--2.0-lightgrey)
+
+---
+
 Autonomous LinkedIn post generation and publishing system powered by Retrieval-Augmented Generation (RAG), multi-tool reasoning, cinematic AI image generation, and automated posting through LinkedIn API.  
 Built using n8n, Pinecone vector search, OpenAI LLMs, Brave/Serp search tools, Google Gemini image generation, and LinkedIn publishing API.
 
@@ -51,17 +62,17 @@ Core Components:
 
 ## 🛠 Tech Stack
 
-| Component | Technology |
-|----------|-------------|
-| Workflow Engine | n8n |
-| LLM | OpenAI GPT-4.1-mini |
-| Embeddings | text-embedding-3-large |
-| Images | Gemini 2.5 Flash Image |
-| Vector DB | Pinecone |
-| Reranker | Cohere ReRank |
-| Search Tools | Brave, SerpAPI |
-| Publishing | LinkedIn OAuth |
-| Parsing & Glue | JS Code execution inside n8n |
+| Component       | Technology                   |
+| --------------- | ---------------------------- |
+| Workflow Engine | n8n                          |
+| LLM             | OpenAI GPT-4.1-mini          |
+| Embeddings      | text-embedding-3-large       |
+| Images          | Gemini 2.5 Flash Image       |
+| Vector DB       | Pinecone                     |
+| Reranker        | Cohere ReRank                |
+| Search Tools    | Brave, SerpAPI               |
+| Publishing      | LinkedIn OAuth               |
+| Parsing & Glue  | JS Code execution inside n8n |
 
 ---
 
@@ -89,7 +100,7 @@ ai-linkedin-auto-posting-agent/
 
 ---
 
-## Screenshot
+## 📸 Workflow Preview (Live System Screenshot)
 
 ![Screenshot](featured-assets/screenshot.png)
 
@@ -123,5 +134,3 @@ DM or open an issue if you're building something similar.
 ## 📄 License
 
 This project is licensed under the Apache License 2.0. See [LICENSE](https://github.com/atulsingh369/ai-linkedin-auto-posting-agent?tab=Apache-2.0-1-ov-file) for details.
-
----
